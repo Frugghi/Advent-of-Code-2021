@@ -8,7 +8,7 @@ Clone the repo and open the Playground in Xcode.
 
 ## Solutions
 
-| Challenge | :closed_book: |
-| --------- | -------- |
-| [Day 1: Sonar sweep](https://adventofcode.com/2021/day/1) | [:page_with_curl:](Advent%20of%20Code%202021.playground/Pages/Day%201.xcplaygroundpage/Contents.swift) |
-| [Day 2: Dive!](https://adventofcode.com/2021/day/2) | [:page_with_curl:](Advent%20of%20Code%202021.playground/Pages/Day%202.xcplaygroundpage/Contents.swift) |
+| Challenge | Stars | :closed_book: |
+| --------- | ----- | -------- |
+| [Day 1: Sonar sweep](https://adventofcode.com/2021/day/1) | :star::star: | [:page_with_curl:](Advent%20of%20Code%202021.playground/Pages/Day%201.xcplaygroundpage/Contents.swift) |
+| [Day 2: Dive!](https://adventofcode.com/2021/day/2) | :star::star: | [:page_with_curl:](Advent%20of%20Code%202021.playground/Pages/Day%202.xcplaygroundpage/Contents.swift) |
