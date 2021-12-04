@@ -2,11 +2,7 @@ import Foundation
 
 public extension Array where Element: LosslessStringConvertible {
     init(from fileName: String, bundle: Bundle = .main, separator: Character = "\n") throws {
-        guard let url = bundle.url(forResource: fileName, withExtension: nil) else {
-            throw URLError(.fileDoesNotExist)
-        }
-
-        self = try String(contentsOf: url)
+        self = try String(contentsOf: fileName, bundle: bundle)
             .split(separator: separator, omittingEmptySubsequences: true)
             .map(String.init)
             .map { string in

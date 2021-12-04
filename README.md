@@ -13,4 +13,4 @@ Clone the repo and open the Playground in Xcode.
 | [Day 1: Sonar sweep](https://adventofcode.com/2021/day/1) | :star::star: | [:page_with_curl:](Advent%20of%20Code%202021.playground/Pages/Day%201.xcplaygroundpage/Contents.swift) |
 | [Day 2: Dive!](https://adventofcode.com/2021/day/2) | :star::star: | [:page_with_curl:](Advent%20of%20Code%202021.playground/Pages/Day%202.xcplaygroundpage/Contents.swift) |
 | [Day 3: Binary Diagnostic](https://adventofcode.com/2021/day/3) | :star::star: | [:page_with_curl:](Advent%20of%20Code%202021.playground/Pages/Day%203.xcplaygroundpage/Contents.swift) |
-
+| [Day 4: Giant Squid](https://adventofcode.com/2021/day/4) | :star::star: | [:page_with_curl:](Advent%20of%20Code%202021.playground/Pages/Day%204.xcplaygroundpage/Contents.swift) |
