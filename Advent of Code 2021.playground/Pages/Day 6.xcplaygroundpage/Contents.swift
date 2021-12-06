@@ -58,7 +58,7 @@ import Foundation
  Find a way to simulate lanternfish. How many lanternfish would there be after 80 days?
  */
 
-let input: [UInt] = try Array(from: "day_6_input", separators: [",", "\n"])
+let input = try Input.day6.load(as: [UInt].self, separators: [",", "\n"])
 
 let countLanternfish = { (input: [UInt], numberOfDays: Int) -> UInt in
     var numberOfDays = numberOfDays

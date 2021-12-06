@@ -49,7 +49,7 @@ import Foundation
  How many measurements are larger than the previous measurement?
  */
 
-let input: [Int] = try Array(from: "day_1_input")
+let input = try Input.day1.load(as: [Int].self)
 
 let answer1 = input.indices.dropFirst().reduce(0) { partialResult, index in
     input[index - 1] < input[index] ? partialResult + 1 : partialResult

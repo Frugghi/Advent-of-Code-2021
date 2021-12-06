@@ -40,7 +40,7 @@ import Foundation
  */
 
 let binaryStringStrategy = BinaryStringParseStrategy<UInt16>()
-let rawInput = try Array<String>(from: "day_3_input")
+let rawInput = try Input.day3.load(as: [String].self)
 let input = try rawInput.map { try UInt16($0, strategy: binaryStringStrategy) }
 
 var bitSetCounter: [Int] = Array(repeating: .zero, count: rawInput[0].count)

@@ -64,7 +64,7 @@ import Foundation
  To guarantee victory against the giant squid, figure out which board will win first. What will your final score be if you choose that board?
  */
 
-let lines = try String(contentsOf: "day_4_input").split(separator: "\n", omittingEmptySubsequences: true)
+let lines = try Input.day4.load(as: [String].self)
 let numbers: [Int] = lines[0].split(separator: ",").map { Int($0)! }
 let bingoBoards = try stride(from: lines.index(after: lines.startIndex), to: lines.endIndex, by: 5).map { index in
     try BingoBoard(input: lines[index..<(index + 5)])
