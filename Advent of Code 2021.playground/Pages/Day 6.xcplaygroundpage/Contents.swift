@@ -60,7 +60,7 @@ import Foundation
 
 let input: [UInt] = try Array(from: "day_6_input", separators: [",", "\n"])
 
-let countLenternfish = { (input: [UInt], numberOfDays: Int) -> UInt in
+let countLanternfish = { (input: [UInt], numberOfDays: Int) -> UInt in
     var numberOfDays = numberOfDays
     var counters = Array<UInt>(repeating: 0, count: 9)
     for input in input {
@@ -86,7 +86,7 @@ let countLenternfish = { (input: [UInt], numberOfDays: Int) -> UInt in
     return counters.reduce(0, +)
 }
 
-let answer1 = countLenternfish(input, 80)
+let answer1 = countLanternfish(input, 80)
 answer1
 
 /*:
@@ -99,7 +99,7 @@ answer1
  How many lanternfish would there be after 256 days?
  */
 
-let answer2 = countLenternfish(input, 256)
+let answer2 = countLanternfish(input, 256)
 answer2
 
 //: [Next](@next)
