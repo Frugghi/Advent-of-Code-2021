@@ -90,7 +90,7 @@ let answer1 = countLanternfish(input, 80)
 answer1
 
 /*:
- ## Part Two
+ ### Part Two
 
  Suppose the lanternfish live forever and have unlimited food and space. Would they take over the entire ocean?
 
