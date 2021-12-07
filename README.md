@@ -16,3 +16,4 @@ Clone the repo and open the Playground in Xcode.
 | [Day 4: Giant Squid](https://adventofcode.com/2021/day/4) | :star::star: | [:page_with_curl:](Advent%20of%20Code%202021.playground/Pages/Day%204.xcplaygroundpage/Contents.swift) |
 | [Day 5: Hydrothermal Venture](https://adventofcode.com/2021/day/5) | :star::star: | [:page_with_curl:](Advent%20of%20Code%202021.playground/Pages/Day%205.xcplaygroundpage/Contents.swift) |
 | [Day 6: Lanternfish](https://adventofcode.com/2021/day/6) | :star::star: | [:page_with_curl:](Advent%20of%20Code%202021.playground/Pages/Day%206.xcplaygroundpage/Contents.swift) |
+| [Day 7: The Treachery of Whales](https://adventofcode.com/2021/day/7) | :star::star: | [:page_with_curl:](Advent%20of%20Code%202021.playground/Pages/Day%207.xcplaygroundpage/Contents.swift) |
