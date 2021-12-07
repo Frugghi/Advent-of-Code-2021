@@ -50,6 +50,23 @@ for input in input {
     counters[input, default: 0] += 1
 }
 
+func calculateFuelConsumption(engine: CrabSubmarineEngine) -> UInt {
+    var forwardsIterator = FuelConsumption(range: minimum...maximum, input: counters, engine: engine)
+    var backwardsIterator = FuelConsumption(range: (minimum...maximum).reversed(), input: counters, engine: engine)
+
+    var forward = forwardsIterator.next()!
+    var backward = backwardsIterator.next()!
+    while forward.index != backward.index {
+        if forwardsIterator.engine.fuelConsumptionRate > backwardsIterator.engine.fuelConsumptionRate {
+            backward = backwardsIterator.next()!
+        } else {
+            forward = forwardsIterator.next()!
+        }
+    }
+
+    return forward.fuelConsumption + backward.fuelConsumption
+}
+
 struct PartOneCrabSubmarineEngine: CrabSubmarineEngine {
     private(set) var fuelConsumptionRate: UInt = 0
 
@@ -58,21 +75,7 @@ struct PartOneCrabSubmarineEngine: CrabSubmarineEngine {
     }
 }
 
-let partOneEngine = PartOneCrabSubmarineEngine()
-var forwardsIterator = FuelConsumption(range: minimum...maximum, input: counters, engine: partOneEngine)
-var backwardsIterator = FuelConsumption(range: (minimum...maximum).reversed(), input: counters, engine: partOneEngine)
-
-var forward = forwardsIterator.next()!
-var backward = backwardsIterator.next()!
-while forward.index != backward.index {
-    if forwardsIterator.engine.fuelConsumptionRate > backwardsIterator.engine.fuelConsumptionRate {
-        backward = backwardsIterator.next()!
-    } else {
-        forward = forwardsIterator.next()!
-    }
-}
-
-let answer1 = forward.fuelConsumption + backward.fuelConsumption
+let answer1 = calculateFuelConsumption(engine: PartOneCrabSubmarineEngine())
 answer1
 
 /*:
@@ -110,21 +113,7 @@ struct PartTwoCrabSubmarineEngine: CrabSubmarineEngine {
     }
 }
 
-let partTwoEngine = PartTwoCrabSubmarineEngine()
-forwardsIterator = FuelConsumption(range: minimum...maximum, input: counters, engine: partTwoEngine)
-backwardsIterator = FuelConsumption(range: (minimum...maximum).reversed(), input: counters, engine: partTwoEngine)
-
-forward = forwardsIterator.next()!
-backward = backwardsIterator.next()!
-while forward.index != backward.index {
-    if forwardsIterator.engine.fuelConsumptionRate > backwardsIterator.engine.fuelConsumptionRate {
-        backward = backwardsIterator.next()!
-    } else {
-        forward = forwardsIterator.next()!
-    }
-}
-
-let answer2 = forward.fuelConsumption + backward.fuelConsumption
+let answer2 = calculateFuelConsumption(engine: PartTwoCrabSubmarineEngine())
 answer2
 
 //: [Next](@next)
