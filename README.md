@@ -18,3 +18,4 @@ Clone the repo and open the Playground in Xcode.
 | [Day 6: Lanternfish](https://adventofcode.com/2021/day/6) | :star::star: | [:page_with_curl:](Advent%20of%20Code%202021.playground/Pages/Day%206.xcplaygroundpage/Contents.swift) |
 | [Day 7: The Treachery of Whales](https://adventofcode.com/2021/day/7) | :star::star: | [:page_with_curl:](Advent%20of%20Code%202021.playground/Pages/Day%207.xcplaygroundpage/Contents.swift) |
 | [Day 8: Seven Segment Search](https://adventofcode.com/2021/day/8) | :star::star: | [:page_with_curl:](Advent%20of%20Code%202021.playground/Pages/Day%208.xcplaygroundpage/Contents.swift) |
+| [Day 9: Smoke Basin](https://adventofcode.com/2021/day/9) | :star::star: | [:page_with_curl:](Advent%20of%20Code%202021.playground/Pages/Day%209.xcplaygroundpage/Contents.swift) |
