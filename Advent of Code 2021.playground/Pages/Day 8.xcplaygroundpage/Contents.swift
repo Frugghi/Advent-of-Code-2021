@@ -89,7 +89,7 @@ for line in input {
 answer1
 
 /*:
- ## Part Two
+ ### Part Two
 
  Through a little deduction, you should now be able to determine the remaining digits. Consider again the first example above:
 
