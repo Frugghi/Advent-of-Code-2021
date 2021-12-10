@@ -68,10 +68,10 @@ let answer1 = input.reduce(UInt(0)) { partialResult, line in
     for character in line {
         switch character {
         case "(", "[", "{", "<": stack.append(character)
-        case ")" where stack.removeLast() != "(": return partialResult + 3
-        case "]" where stack.removeLast() != "[": return partialResult + 57
-        case "}" where stack.removeLast() != "{": return partialResult + 1197
-        case ">" where stack.removeLast() != "<": return partialResult + 25137
+        case ")" where stack.popLast() != "(": return partialResult + 3
+        case "]" where stack.popLast() != "[": return partialResult + 57
+        case "}" where stack.popLast() != "{": return partialResult + 1197
+        case ">" where stack.popLast() != "<": return partialResult + 25137
         default: break
         }
     }
@@ -131,10 +131,10 @@ let scores = input.compactMap { line -> UInt? in
     for character in line {
         switch character {
         case "(", "[", "{", "<": stack.append(character)
-        case ")" where stack.removeLast() != "(": return nil
-        case "]" where stack.removeLast() != "[": return nil
-        case "}" where stack.removeLast() != "{": return nil
-        case ">" where stack.removeLast() != "<": return nil
+        case ")" where stack.popLast() != "(": return nil
+        case "]" where stack.popLast() != "[": return nil
+        case "}" where stack.popLast() != "{": return nil
+        case ">" where stack.popLast() != "<": return nil
         default: break
         }
     }
