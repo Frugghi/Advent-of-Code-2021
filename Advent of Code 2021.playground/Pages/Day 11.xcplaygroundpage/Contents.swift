@@ -308,11 +308,10 @@ let input = try Input.day11.load(as: [String].self).map { $0.map { UInt8(String(
 let rows = input.count
 let columns = input[0].count
 
-var energyLevels = input.flatMap { $0 }
-let answer1 = (1...100).reduce(into: UInt(0)) { partialResult, _ in
+let numberOfFlashesInNextStep = { (energyLevels: inout [UInt8]) -> Int in
     var flashesQueue: [Int] = []
 
-    let increaseEnergyLevels = { (index: Int) in
+    let increaseEnergyLevel = { (index: Int, energyLevels: inout [UInt8]) in
         energyLevels[index] += 1
 
         if energyLevels[index] == 10 {
@@ -320,24 +319,30 @@ let answer1 = (1...100).reduce(into: UInt(0)) { partialResult, _ in
         }
     }
 
-    energyLevels.indices.forEach(increaseEnergyLevels)
+    energyLevels.indices.forEach { index in
+        increaseEnergyLevel(index, &energyLevels)
+    }
 
     var index = flashesQueue.startIndex
     while index != flashesQueue.endIndex {
-        defer {
-            index = flashesQueue.index(after: index)
+        defer { index = flashesQueue.index(after: index) }
+
+        AdjacentPointsGenerator(flashesQueue[index], rows: rows, columns: columns).forEach { index in
+            increaseEnergyLevel(index, &energyLevels)
         }
-
-        let element = flashesQueue[index]
-        partialResult += 1
-
-        AdjacentPointsGenerator(element, rows: rows, columns: columns).forEach(increaseEnergyLevels)
     }
 
     for index in flashesQueue {
         energyLevels[index] = 0
     }
+
+    return flashesQueue.count
 }
+
+var energyLevels = input.flatMap { $0 }
+let answer1 = (1...100).lazy
+    .map { _ in numberOfFlashesInNextStep(&energyLevels) }
+    .reduce(0, +)
 
 answer1
 
@@ -389,33 +394,8 @@ answer1
 
 energyLevels = input.flatMap { $0 }
 let answer2 = (1...).first(where: { _ in
-    var flashesQueue: [Int] = []
-
-    let increaseEnergyLevels = { (index: Int) in
-        energyLevels[index] += 1
-
-        if energyLevels[index] == 10 {
-            flashesQueue.append(index)
-        }
-    }
-
-    energyLevels.indices.forEach(increaseEnergyLevels)
-
-    var index = flashesQueue.startIndex
-    while index != flashesQueue.endIndex {
-        defer {
-            index = flashesQueue.index(after: index)
-        }
-
-        AdjacentPointsGenerator(flashesQueue[index], rows: rows, columns: columns).forEach(increaseEnergyLevels)
-    }
-
-    for index in flashesQueue {
-        energyLevels[index] = 0
-    }
-
-    return flashesQueue.count == energyLevels.count
-})
+    numberOfFlashesInNextStep(&energyLevels) == energyLevels.count
+})!
 
 answer2
 
