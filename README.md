@@ -20,3 +20,5 @@ Clone the repo and open the Playground in Xcode.
 | [Day 8: Seven Segment Search](https://adventofcode.com/2021/day/8) | :star::star: | [:page_with_curl:](Advent%20of%20Code%202021.playground/Pages/Day%208.xcplaygroundpage/Contents.swift) |
 | [Day 9: Smoke Basin](https://adventofcode.com/2021/day/9) | :star::star: | [:page_with_curl:](Advent%20of%20Code%202021.playground/Pages/Day%209.xcplaygroundpage/Contents.swift) |
 | [Day 10: Syntax Scoring](https://adventofcode.com/2021/day/10) | :star::star: | [:page_with_curl:](Advent%20of%20Code%202021.playground/Pages/Day%2010.xcplaygroundpage/Contents.swift) |
+| [Day 11: Dumbo Octopus](https://adventofcode.com/2021/day/11) | :star::star: | [:page_with_curl:](Advent%20of%20Code%202021.playground/Pages/Day%2011.xcplaygroundpage/Contents.swift) |
+
