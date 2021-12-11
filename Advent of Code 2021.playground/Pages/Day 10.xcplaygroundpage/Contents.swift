@@ -148,7 +148,7 @@ let scores = input.compactMap { line -> UInt? in
         default: break
         }
     }
-}
+}.sorted()
 
 let answer2 = scores[scores.count / 2]
 answer2
