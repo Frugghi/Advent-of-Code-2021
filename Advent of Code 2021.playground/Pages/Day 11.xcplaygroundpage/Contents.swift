@@ -310,16 +310,13 @@ let columns = input[0].count
 
 var energyLevels = input.flatMap { $0 }
 let answer1 = (1...100).reduce(into: UInt(0)) { partialResult, _ in
-    var flashed: Set<Int> = []
     var flashesQueue: [Int] = []
 
     let increaseEnergyLevels = { (index: Int) in
-        if energyLevels[index] == 9 {
-            if flashed.insert(index).inserted {
-                flashesQueue.append(index)
-            }
-        } else {
-            energyLevels[index] += 1
+        energyLevels[index] += 1
+
+        if energyLevels[index] == 10 {
+            flashesQueue.append(index)
         }
     }
 
@@ -337,7 +334,7 @@ let answer1 = (1...100).reduce(into: UInt(0)) { partialResult, _ in
         AdjacentPointsGenerator(element, rows: rows, columns: columns).forEach(increaseEnergyLevels)
     }
 
-    for index in flashed {
+    for index in flashesQueue {
         energyLevels[index] = 0
     }
 }
@@ -392,16 +389,13 @@ answer1
 
 energyLevels = input.flatMap { $0 }
 let answer2 = (1...).first(where: { _ in
-    var flashed: Set<Int> = []
     var flashesQueue: [Int] = []
 
     let increaseEnergyLevels = { (index: Int) in
-        if energyLevels[index] == 9 {
-            if flashed.insert(index).inserted {
-                flashesQueue.append(index)
-            }
-        } else {
-            energyLevels[index] += 1
+        energyLevels[index] += 1
+
+        if energyLevels[index] == 10 {
+            flashesQueue.append(index)
         }
     }
 
@@ -416,11 +410,11 @@ let answer2 = (1...).first(where: { _ in
         AdjacentPointsGenerator(flashesQueue[index], rows: rows, columns: columns).forEach(increaseEnergyLevels)
     }
 
-    for index in flashed {
+    for index in flashesQueue {
         energyLevels[index] = 0
     }
 
-    return flashed.count == energyLevels.count
+    return flashesQueue.count == energyLevels.count
 })
 
 answer2
