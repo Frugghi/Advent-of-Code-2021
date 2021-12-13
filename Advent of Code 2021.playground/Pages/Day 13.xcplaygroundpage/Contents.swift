@@ -115,10 +115,18 @@ import Foundation
  */
 
 let input = try Input.day13.load(as: [String].self)
+let dots = input.prefix(while: { !$0.hasPrefix("fold") }).map { Point($0)! }
+let folds = input.dropFirst(dots.count).map { FoldOperation($0)! }
 
 enum FoldOperation {
     case left(Int)
     case up(Int)
+
+    init?(_ string: String) {
+        let components = string.split(separator: "=")
+        guard components.count == 2, let value = Int(components[1]) else { return nil }
+        self = components[0].last == "x" ? .left(value) : .up(value)
+    }
 
     func fold(_ dots: [Point]) -> [Point] {
         var dots = dots
@@ -137,16 +145,6 @@ enum FoldOperation {
 
         return dots
     }
-}
-
-let dots = input.prefix(while: { !$0.hasPrefix("fold") }).map { line -> Point in
-    let components = line.split(separator: ",")
-    return Point(x: Int(components[0])!, y: Int(components[1])!)
-}
-let folds = input.dropFirst(dots.count).map { line -> FoldOperation in
-    let components = line.split(separator: "=")
-    let value = Int(components[1])!
-    return components[0].last == "x" ? .left(value) : .up(value)
 }
 
 let answer1 = Set(folds[0].fold(dots)).count
