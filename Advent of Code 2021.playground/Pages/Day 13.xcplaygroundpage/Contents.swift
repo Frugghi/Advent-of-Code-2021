@@ -118,36 +118,32 @@ let input = try Input.day13.load(as: [String].self)
 let dots = input.prefix(while: { !$0.hasPrefix("fold") }).map { Point($0)! }
 let folds = input.dropFirst(dots.count).map { FoldOperation($0)! }
 
-enum FoldOperation {
-    case left(Int)
-    case up(Int)
+struct FoldOperation {
+    private let value: Int
+    private let axis: WritableKeyPath<Point, Int>
 
     init?(_ string: String) {
         let components = string.split(separator: "=")
         guard components.count == 2, let value = Int(components[1]) else { return nil }
-        self = components[0].last == "x" ? .left(value) : .up(value)
+
+        self.value = value
+        self.axis = components[0].last == "x" ? \.x : \.y
     }
 
-    func fold(_ dots: [Point]) -> [Point] {
-        var dots = dots
-
-        switch self {
-        case .left(let x):
-            for index in dots.indices where dots[index].x > x {
-                dots[index].x = 2 * x - dots[index].x
+    func fold(_ dots: Set<Point>) -> Set<Point> {
+        Set(
+            dots.lazy.map { point in
+                var point = point
+                if point[keyPath: axis] > value {
+                    point[keyPath: axis] = 2 * value - point[keyPath: axis]
+                }
+                return point
             }
-
-        case .up(let y):
-            for index in dots.indices where dots[index].y > y {
-                dots[index].y = 2 * y - dots[index].y
-            }
-        }
-
-        return dots
+        )
     }
 }
 
-let answer1 = Set(folds[0].fold(dots)).count
+let answer1 = folds[0].fold(Set(dots)).count
 answer1
 
 /*:
@@ -158,11 +154,11 @@ answer1
  What code do you use to activate the infrared thermal imaging camera system?
  */
 
-let foldedDots = folds.reduce(dots) { partialResult, foldOperation in
+let foldedDots = folds.reduce(Set(dots)) { partialResult, foldOperation in
     foldOperation.fold(partialResult)
 }
 
-let answer2 = Matrix(points: foldedDots)
+let answer2 = DotsRenderer(dots: foldedDots)
 print("\(answer2)")
 answer2
 

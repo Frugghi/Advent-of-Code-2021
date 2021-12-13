@@ -1,8 +1,8 @@
 import Foundation
 import UIKit
 
-public struct Matrix: CustomStringConvertible, CustomPlaygroundDisplayConvertible {
-    private let points: [Point]
+public struct DotsRenderer: CustomStringConvertible, CustomPlaygroundDisplayConvertible {
+    private let points: Set<Point>
     private let maxX: Int
     private let maxY: Int
 
@@ -37,7 +37,8 @@ public struct Matrix: CustomStringConvertible, CustomPlaygroundDisplayConvertibl
         }
     }
 
-    public init(points: [Point]) {
+    public init<S>(dots: S) where S: Sequence, S.Element == Point {
+        let points = Set(dots)
         var maxX: Int = 0
         var maxY: Int = 0
         for point in points {
