@@ -159,7 +159,7 @@ let foldedDots = folds.reduce(Set(dots)) { partialResult, foldOperation in
 }
 
 let answer2 = DotsRenderer(dots: foldedDots)
-print("\(answer2)")
 answer2
+answer2.description
 
 //: [Next](@next)
