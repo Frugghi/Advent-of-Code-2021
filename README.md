@@ -23,3 +23,4 @@ Clone the repo and open the Playground in Xcode.
 | [Day 11: Dumbo Octopus](https://adventofcode.com/2021/day/11) | :star::star: | [:page_with_curl:](Advent%20of%20Code%202021.playground/Pages/Day%2011.xcplaygroundpage/Contents.swift) |
 | [Day 12: Passage Pathing](https://adventofcode.com/2021/day/12) | :star::star: | [:page_with_curl:](Advent%20of%20Code%202021.playground/Pages/Day%2012.xcplaygroundpage/Contents.swift) |
 | [Day 13: Transparent Origami](https://adventofcode.com/2021/day/13) | :star::star: | [:page_with_curl:](Advent%20of%20Code%202021.playground/Pages/Day%2013.xcplaygroundpage/Contents.swift) |
+| [Day 14: Extended Polymerization](https://adventofcode.com/2021/day/14) | :star::star: | [:page_with_curl:](Advent%20of%20Code%202021.playground/Pages/Day%2014.xcplaygroundpage/Contents.swift) |
