@@ -64,49 +64,25 @@ let pairInsertionRules = Dictionary(uniqueKeysWithValues: input.dropFirst().map 
     return (Pair(components[0]), components[1].first!)
 })
 
-func recursiveExpandPair(
-    _ pair: Pair,
-    times step: Int,
-    expansionRules: [Pair: Character],
-    cache: inout [Pair: [Int: [Character: UInt]]]
-) -> [Character: UInt] {
-    if step == 0 {
-        var counters: [Character: UInt] = [:]
-        counters[pair.first, default: 0] += 1
-        counters[pair.second, default: 0] += 1
-        return counters
-    }
-
-    let expandPair = { (times: Int, pair: Pair, cache: inout [Pair: [Int: [Character: UInt]]]) -> [Character: UInt] in
-        if let cached = cache[pair]?[step] {
-            return cached
-        } else {
-            let result = recursiveExpandPair(pair, times: times, expansionRules: expansionRules, cache: &cache)
-            cache[pair, default: [:]][step] = result
-            return result
+func solve(steps: Int, polymerTemplate: String, expansionRules: [Pair: Character]) -> UInt {
+    let initialState: [Pair: UInt] = Dictionary(polymerTemplate.pairs().map { ($0, 1) }, uniquingKeysWith: +)
+    let countedPairs = (1...steps).reduce(initialState) { partialResult, _ in
+        partialResult.reduce(into: [:]) { partialResult, countedPair in
+            let (pair, count) = countedPair
+            let (first, second) = pair.pairsInserting(expansionRules[pair]!)
+            partialResult[first, default: 0] += count
+            partialResult[second, default: 0] += count
         }
     }
-
-    let element = expansionRules[pair]!
-    let (first, second) = pair.pairsInserting(element)
-    var counter = expandPair(step - 1, first, &cache)
-    counter.merge(expandPair(step - 1, second, &cache), uniquingKeysWith: +)
-    counter[element]? -= 1
-
-    return counter
-}
-
-func solve(steps: Int, polymerTemplate: String, expansionRules: [Pair: Character]) -> UInt {
-    var counters: [Character: UInt] = [:]
-    var cache: [Pair: [Int: [Character: UInt]]] = [:]
-    for pair in polymerTemplate.pairs() {
-        counters[pair.first]? -= 1
-
-        let pairCounters = recursiveExpandPair(pair, times: steps, expansionRules: expansionRules, cache: &cache)
-        counters.merge(pairCounters, uniquingKeysWith: +)
+    var countedCharacters: [Character: UInt] = countedPairs.reduce(into: [:]) { partialResult, countedPair in
+        let (pair, count) = countedPair
+        partialResult[pair.first, default: 0] += count
+        partialResult[pair.second, default: 0] += count
     }
+    countedCharacters[polymerTemplate.first!, default: 0] += 1
+    countedCharacters[polymerTemplate.last!, default: 0] += 1
 
-    return counters.values.max()! - counters.values.min()!
+    return (countedCharacters.values.max()! - countedCharacters.values.min()!) / 2
 }
 
 let answer1 = solve(steps: 10, polymerTemplate: polymerTemplate, expansionRules: pairInsertionRules)
