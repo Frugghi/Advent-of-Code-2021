@@ -327,7 +327,7 @@ let numberOfFlashesInNextStep = { (energyLevels: inout [UInt8]) -> Int in
     while index != flashesQueue.endIndex {
         defer { index = flashesQueue.index(after: index) }
 
-        AdjacentPointsGenerator(flashesQueue[index], rows: rows, columns: columns).forEach { index in
+        FlattenMatrixAdjacentPointsGenerator(flashesQueue[index], rows: rows, columns: columns).forEach { index in
             increaseEnergyLevel(index, &energyLevels)
         }
     }
