@@ -11,7 +11,6 @@ public struct AStar {
 
     private(set) var minHeap: Heap<(index: Int, cost: UInt)>
     private(set) var costs: [UInt]
-    private var heapSet: Set<Int>
 
     public init(from startIndex: Int, to endIndex: Int, in flattenMatrix: [UInt8], rows: Int, columns: Int) {
         self.startIndex = startIndex
@@ -22,7 +21,6 @@ public struct AStar {
 
         minHeap = Heap<(index: Int, cost: UInt)> { $0.cost < $1.cost }
         costs = Array(repeating: UInt.max, count: flattenMatrix.count)
-        heapSet = []
 
         let (targetRow, targetColumn) = endIndex.quotientAndRemainder(dividingBy: columns)
         heuristic = { index in
@@ -75,19 +73,14 @@ public struct AStar {
 
     mutating func nextStep() -> (index: Int, cost: UInt)? {
         guard let current = minHeap.pop() else { return nil }
-        heapSet.remove(current.index)
 
         for index in AdjacentPointsGenerator(current.index, rows: rows, columns: columns, includeDiagonals: false) {
             let cost = costs[current.index] &+ numericCast(flattenMatrix[index])
             if cost < costs[index] {
                 costs[index] = cost
+                
                 let element = (index: index, cost: cost &+ heuristic(index))
-
-                if heapSet.insert(element.index).inserted {
-                    minHeap.insert(element)
-                } else {
-                    minHeap.replace(with: element) { $0.index == element.index }
-                }
+                minHeap.insert(element)
             }
         }
 
