@@ -2,40 +2,47 @@ import Foundation
 
 public struct BuoyancyInterchangeTransmissionSystem {
 
-    public enum NumericExpression {
-        indirect case sum(version: UInt8, [NumericExpression])
-        indirect case product(version: UInt8, [NumericExpression])
-        indirect case minimum(version: UInt8, [NumericExpression])
-        indirect case maximum(version: UInt8, [NumericExpression])
-        case number(version: UInt8, value: UInt)
-        indirect case greaterThan(version: UInt8, NumericExpression, NumericExpression)
-        indirect case lessThan(version: UInt8, NumericExpression, NumericExpression)
-        indirect case equalTo(version: UInt8, NumericExpression, NumericExpression)
+    public struct NumericExpression {
+        public let version: UInt8
+        public let subExpressions: [NumericExpression]
 
-        public var version: UInt8 {
-            switch self {
-            case .sum(let version, _),
-                 .product(let version, _),
-                 .minimum(let version, _),
-                 .maximum(let version, _),
-                 .number(let version, _),
-                 .greaterThan(let version, _, _),
-                 .lessThan(let version, _, _),
-                 .equalTo(let version, _, _):
-                return version
-            }
+        private let type: NumberOrOperator
+
+        enum Operator {
+            case sum, product, minimum, maximum, greaterThan, lessThan, equalTo
+        }
+
+        private enum NumberOrOperator {
+            case number(UInt)
+            case `operator`(Operator)
+        }
+
+        init(_ value: UInt, version: UInt8) {
+            type = .number(value)
+            subExpressions = []
+            self.version = version
+        }
+
+        init(_ `operator`: Operator, subExpressions: [NumericExpression], version: UInt8) {
+            type = .operator(`operator`)
+            self.subExpressions = subExpressions
+            self.version = version
         }
 
         public func evaluate() -> UInt {
-            switch self {
-            case .sum(_, let expressions): return expressions.map { $0.evaluate() }.reduce(0, +)
-            case .product(_, let expressions): return expressions.map { $0.evaluate() }.reduce(1, *)
-            case .minimum(_, let expressions): return expressions.map { $0.evaluate() }.min()!
-            case .maximum(_, let expressions): return expressions.map { $0.evaluate() }.max()!
-            case .number(_, let value): return value
-            case .greaterThan(_, let lhs, let rhs): return lhs.evaluate() > rhs.evaluate() ? 1 : 0
-            case .lessThan(_, let lhs, let rhs): return lhs.evaluate() < rhs.evaluate() ? 1 : 0
-            case .equalTo(_, let lhs, let rhs): return lhs.evaluate() == rhs.evaluate() ? 1 : 0
+            switch type {
+            case .number(let number): return number
+            case .operator(let `operator`):
+                let values = subExpressions.map { $0.evaluate() }
+                switch `operator` {
+                case .sum: return values.reduce(0, +)
+                case .product: return values.reduce(1, *)
+                case .minimum: return values.min()!
+                case .maximum: return values.max()!
+                case .greaterThan: return values[0] > values[1] ? 1 : 0
+                case .lessThan: return values[0] < values[1] ? 1 : 0
+                case .equalTo: return values[0] == values[1] ? 1 : 0
+                }
             }
         }
     }
@@ -133,43 +140,25 @@ private extension BuoyancyInterchangeTransmissionSystem.DecodingBitstream {
         let type = try next(3).cast(as: UInt8.self)
 
         switch type {
-        case 0:
-            let (subPackets, count) = try decodeSubPackets()
-            return (.sum(version: version, subPackets), count)
-
-        case 1:
-            let (subPackets, count) = try decodeSubPackets()
-            return (.product(version: version, subPackets), count)
-
-        case 2:
-            let (subPackets, count) = try decodeSubPackets()
-            return (.minimum(version: version, subPackets), count)
-
-        case 3:
-            let (subPackets, count) = try decodeSubPackets()
-            return (.maximum(version: version, subPackets), count)
-
         case 4:
             let (value, count) = try decodeNumber()
-            return (.number(version: version, value: value), count)
-
-        case 5:
-            let (subPackets, count) = try decodeSubPackets()
-            assert(subPackets.count == 2)
-            return (.greaterThan(version: version, subPackets[0], subPackets[1]), count)
-
-        case 6:
-            let (subPackets, count) = try decodeSubPackets()
-            assert(subPackets.count == 2)
-            return (.lessThan(version: version, subPackets[0], subPackets[1]), count)
-
-        case 7:
-            let (subPackets, count) = try decodeSubPackets()
-            assert(subPackets.count == 2)
-            return (.equalTo(version: version, subPackets[0], subPackets[1]), count)
+            return (NumericExpression(value, version: version), count)
 
         default:
-            fatalError("Unknown type: \(type)")
+            let `operator`: NumericExpression.Operator
+            switch type {
+            case 0: `operator` = .sum
+            case 1: `operator` = .product
+            case 2: `operator` = .minimum
+            case 3: `operator` = .maximum
+            case 5: `operator` = .greaterThan
+            case 6: `operator` = .lessThan
+            case 7: `operator` = .equalTo
+            default: fatalError("Unknown operator: \(type)")
+            }
+
+            let (subPackets, count) = try decodeSubPackets()
+            return (NumericExpression(`operator`, subExpressions: subPackets, version: version), count)
         }
     }
 

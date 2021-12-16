@@ -105,18 +105,7 @@ var queue = [expression]
 var answer1: UInt = 0
 while let expression = queue.popLast() {
     answer1 += numericCast(expression.version)
-
-    switch expression {
-    case .sum(_, let array), .product(_, let array), .minimum(_, let array), .maximum(_, let array):
-        queue.append(contentsOf: array)
-
-    case .number:
-        break
-
-    case .greaterThan(_, let lhs, let rhs), .lessThan(_, let lhs, let rhs), .equalTo(_, let lhs, let rhs):
-        queue.append(lhs)
-        queue.append(rhs)
-    }
+    queue.append(contentsOf: expression.subExpressions)
 }
 answer1
 
