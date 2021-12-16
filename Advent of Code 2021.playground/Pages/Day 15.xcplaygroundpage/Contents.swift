@@ -44,9 +44,8 @@ let input = try Input.day15.load(as: [String].self).map { $0.map { UInt8(String(
 let rows = input.count
 let columns = input[0].count
 
-let smallMap = input.flatMap { $0 }
-let answer1 = AStar(from: 0, to: smallMap.count - 1, in: smallMap, rows: rows, columns: columns)
-                .bidirectionalSearch()
+let smallMap = Matrix2D(input)
+let answer1 = AStar(from: smallMap.startIndex, to: smallMap.endIndex - 1, in: smallMap).bidirectionalSearch()
 answer1
 
 /*:
@@ -175,9 +174,8 @@ answer1
  Using the full map, what is the lowest total risk of any path from the top left to the bottom right?
  */
 
-let fullMap = input.repeating(times: 5).flatMap { $0 }
-let answer2 = AStar(from: 0, to: fullMap.count - 1, in: fullMap, rows: rows * 5, columns: columns * 5)
-                .bidirectionalSearch()
+let fullMap = Matrix2D(input.repeating(times: 5))
+let answer2 = AStar(from: fullMap.startIndex, to: fullMap.endIndex - 1, in: fullMap).bidirectionalSearch()
 answer2
 
 //: [Next](@next)

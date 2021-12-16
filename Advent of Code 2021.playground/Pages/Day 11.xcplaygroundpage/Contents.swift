@@ -305,13 +305,11 @@ import Foundation
  */
 
 let input = try Input.day11.load(as: [String].self).map { $0.map { UInt8(String($0))! } }
-let rows = input.count
-let columns = input[0].count
 
-let numberOfFlashesInNextStep = { (energyLevels: inout [UInt8]) -> Int in
+let numberOfFlashesInNextStep = { (energyLevels: inout Matrix2D<UInt8>) -> Int in
     var flashesQueue: [Int] = []
 
-    let increaseEnergyLevel = { (index: Int, energyLevels: inout [UInt8]) in
+    let increaseEnergyLevel = { (index: Int, energyLevels: inout Matrix2D<UInt8>) in
         energyLevels[index] += 1
 
         if energyLevels[index] == 10 {
@@ -327,7 +325,7 @@ let numberOfFlashesInNextStep = { (energyLevels: inout [UInt8]) -> Int in
     while index != flashesQueue.endIndex {
         defer { index = flashesQueue.index(after: index) }
 
-        FlattenMatrixAdjacentPointsGenerator(flashesQueue[index], rows: rows, columns: columns).forEach { index in
+        energyLevels.adjacentIndices(to: flashesQueue[index]).forEach { index in
             increaseEnergyLevel(index, &energyLevels)
         }
     }
@@ -339,7 +337,7 @@ let numberOfFlashesInNextStep = { (energyLevels: inout [UInt8]) -> Int in
     return flashesQueue.count
 }
 
-var energyLevels = input.flatMap { $0 }
+var energyLevels = Matrix2D(input)
 let answer1 = (1...100).lazy
     .map { _ in numberOfFlashesInNextStep(&energyLevels) }
     .reduce(0, +)
@@ -392,7 +390,7 @@ answer1
  If you can calculate the exact moments when the octopuses will all flash simultaneously, you should be able to navigate through the cavern. What is the first step during which all octopuses flash?
  */
 
-energyLevels = input.flatMap { $0 }
+energyLevels = Matrix2D(input)
 let answer2 = (1...).first(where: { _ in
     numberOfFlashesInNextStep(&energyLevels) == energyLevels.count
 })!

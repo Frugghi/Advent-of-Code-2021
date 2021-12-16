@@ -1,10 +1,7 @@
 import Foundation
 
 public struct AStar {
-    private typealias AdjacentPointsGenerator = FlattenMatrixAdjacentPointsGenerator
-    private let rows: Int
-    private let columns: Int
-    private let flattenMatrix: [UInt8]
+    private let matrix: Matrix2D<UInt8>
     private let startIndex: Int
     private let endIndex: Int
     private let heuristic: (Int) -> UInt
@@ -12,19 +9,17 @@ public struct AStar {
     private(set) var minHeap: Heap<(index: Int, cost: UInt)>
     private(set) var costs: [UInt]
 
-    public init(from startIndex: Int, to endIndex: Int, in flattenMatrix: [UInt8], rows: Int, columns: Int) {
+    public init(from startIndex: Int, to endIndex: Int, in matrix: Matrix2D<UInt8>) {
         self.startIndex = startIndex
         self.endIndex = endIndex
-        self.flattenMatrix = flattenMatrix
-        self.rows = rows
-        self.columns = columns
+        self.matrix = matrix
 
         minHeap = Heap<(index: Int, cost: UInt)> { $0.cost < $1.cost }
-        costs = Array(repeating: UInt.max, count: flattenMatrix.count)
+        costs = Array(repeating: UInt.max, count: matrix.count)
 
-        let (targetRow, targetColumn) = endIndex.quotientAndRemainder(dividingBy: columns)
+        let (targetRow, targetColumn) = endIndex.quotientAndRemainder(dividingBy: matrix.columns)
         heuristic = { index in
-            let (row, column) = index.quotientAndRemainder(dividingBy: columns)
+            let (row, column) = index.quotientAndRemainder(dividingBy: matrix.columns)
 
             return numericCast(abs(targetRow &- row) &+ abs(targetColumn &- column))
         }
@@ -45,7 +40,7 @@ public struct AStar {
 
     public func bidirectionalSearch() -> UInt {
         var forward = self
-        var backward = AStar(from: endIndex, to: startIndex, in: flattenMatrix, rows: rows, columns: columns)
+        var backward = AStar(from: endIndex, to: startIndex, in: matrix)
 
         var forwardStep = forward.nextStep()
         var backwardStep = backward.nextStep()
@@ -66,16 +61,16 @@ public struct AStar {
         } else {
             let index = forward.costs[backwardStep!.index] != .max ? backwardStep!.index : forwardStep!.index
             return forward.costs[index] + backward.costs[index]
-                    + numericCast(flattenMatrix[endIndex]) // Add the cost of the final step to the backward search
-                    - numericCast(flattenMatrix[index])    // The current step has been counted twice
+                    + numericCast(matrix[endIndex]) // Add the cost of the final step to the backward search
+                    - numericCast(matrix[index])    // The current step has been counted twice
         }
     }
 
     mutating func nextStep() -> (index: Int, cost: UInt)? {
         guard let current = minHeap.pop() else { return nil }
 
-        for index in AdjacentPointsGenerator(current.index, rows: rows, columns: columns, includeDiagonals: false) {
-            let cost = costs[current.index] &+ numericCast(flattenMatrix[index])
+        for index in matrix.adjacentIndices(to: current.index, includeDiagonals: false) {
+            let cost = costs[current.index] &+ numericCast(matrix[index])
             if cost < costs[index] {
                 costs[index] = cost
                 
