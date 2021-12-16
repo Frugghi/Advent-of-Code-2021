@@ -1,6 +1,10 @@
 import Foundation
 import Vision
+#if canImport(UIKit)
 import UIKit
+#else
+import AppKit
+#endif
 
 public final class DotsRenderer: CustomStringConvertible, CustomPlaygroundDisplayConvertible {
     private let points: Set<Point>
@@ -20,7 +24,7 @@ public final class DotsRenderer: CustomStringConvertible, CustomPlaygroundDispla
     }()
 
     public var playgroundDescription: Any {
-        renderImage(usingCircles: true)
+        renderImage(usingCircles: true) as Any
     }
 
     public init<S>(dots: S) where S: Sequence, S.Element == Point {
@@ -38,7 +42,7 @@ public final class DotsRenderer: CustomStringConvertible, CustomPlaygroundDispla
     }
 
     private func ocr() -> String? {
-        guard let cgImage = renderImage(usingCircles: false).cgImage else { return nil }
+        guard let cgImage = renderImage(usingCircles: false) else { return nil }
 
         var result: String?
         let requestHandler = VNImageRequestHandler(cgImage: cgImage)
@@ -64,16 +68,14 @@ public final class DotsRenderer: CustomStringConvertible, CustomPlaygroundDispla
         return result
     }
 
-    private func renderImage(usingCircles circles: Bool) -> UIImage {
+    private func renderImage(usingCircles circles: Bool) -> CGImage? {
         let dotSize = CGSize(width: 8, height: 8)
         let spacing: CGFloat = circles ? 4 : 0
         let horizontalInset: CGFloat = 12
         let verticalInset: CGFloat = 12
         let width = CGFloat(maxX + 1) * dotSize.width + CGFloat(maxX) * spacing + horizontalInset * 2
         let height = CGFloat(maxY + 1) * dotSize.height + CGFloat(maxY) * spacing + verticalInset * 2
-        let renderer = UIGraphicsImageRenderer(size: CGSize(width: width, height: height))
-        return renderer.image { context in
-            UIColor.white.setFill()
+        let draw = { [points] (context: CGContext) in
             for point in points {
                 let rect = CGRect(
                     origin: CGPoint(
@@ -82,8 +84,31 @@ public final class DotsRenderer: CustomStringConvertible, CustomPlaygroundDispla
                     ),
                     size: dotSize
                 )
-                circles ? context.cgContext.fillEllipse(in: rect) : context.cgContext.fill(rect)
+
+                circles ? context.fillEllipse(in: rect) : context.fill(rect)
             }
         }
+#if canImport(UIKIt)
+        let renderer = UIGraphicsImageRenderer(size: CGSize(width: width, height: height))
+        return renderer.image { context in
+            UIColor.white.setFill()
+            draw(context.cgContext)
+        }.cgImage
+#else
+        return NSImage(size: .init(width: width, height: height), flipped: false) { rect in
+            NSGraphicsContext.saveGraphicsState()
+            NSColor.white.setFill()
+
+            var transform = AffineTransform()
+            transform.translate(x: 0, y: height)
+            transform.scale(x: 1, y: -1)
+            (transform as NSAffineTransform).concat()
+
+            draw(NSGraphicsContext.current!.cgContext)
+
+            NSGraphicsContext.restoreGraphicsState()
+            return true
+        }.cgImage(forProposedRect: nil, context: nil, hints: nil)
+#endif
     }
 }
