@@ -26,4 +26,4 @@ Clone the repo and open the Playground in Xcode.
 | [Day 14: Extended Polymerization](https://adventofcode.com/2021/day/14) | :star::star: | [:page_with_curl:](Advent%20of%20Code%202021.playground/Pages/Day%2014.xcplaygroundpage/Contents.swift) |
 | [Day 15: Chiton](https://adventofcode.com/2021/day/15) | :star::star: | [:page_with_curl:](Advent%20of%20Code%202021.playground/Pages/Day%2015.xcplaygroundpage/Contents.swift) |
 | [Day 16: Packet Decoder](https://adventofcode.com/2021/day/16) | :star::star: | [:page_with_curl:](Advent%20of%20Code%202021.playground/Pages/Day%2016.xcplaygroundpage/Contents.swift) |
-| [Day 17: Packet Decoder](https://adventofcode.com/2021/day/17) | :star::star: | [:page_with_curl:](Advent%20of%20Code%202021.playground/Pages/Day%2017.xcplaygroundpage/Contents.swift) |
+| [Day 17: Trick Shot](https://adventofcode.com/2021/day/17) | :star::star: | [:page_with_curl:](Advent%20of%20Code%202021.playground/Pages/Day%2017.xcplaygroundpage/Contents.swift) |
